@@ -9,11 +9,11 @@ using namespace std;
 
 int main(int argc, char* argv[]) {
     // Binary Search Tree Pointers
-    BST<int> *myIntBST;
-    BST<int> *myIntBSTCopy;
+    BST<int> *myIntBST = NULL;
+    BST<int> *myIntBSTCopy = NULL;
 
-    BST<string> *myStringBST;
-    BST<string> *myStringBSTCopy;
+    BST<string> *myStringBST = NULL;
+    BST<string> *myStringBSTCopy = NULL;
 
     // File I/O
     ifstream in ("input.txt");
@@ -25,16 +25,22 @@ int main(int argc, char* argv[]) {
     string activeTreeType;
 
     // Process Input File
-    string line, command, token;
-    while (getline(in, line)) {
-        try {
-            // Process File Strings
-            if (line.size() == 0) continue;
-            istringstream iss(line);
-            iss >> command;
-            
+    for (string line; getline(in, line);) {
+        string command, token;
+        if (line.size() == 0) continue;
+
+        istringstream iss(line);
+        iss >> command;
+
+        try { 
+            out << command;
+
             if (command == "INT") {
-                // Delete Old Object
+
+                // Clear Old BST
+                if (myIntBST != NULL) {
+                    myIntBST->clearTree();
+                }
 
                 // Instantiate new BST
                 myIntBST = new BST <int>;
@@ -42,8 +48,12 @@ int main(int argc, char* argv[]) {
                 // Set treeType
                 activeTreeType = "INT";
 
+                out << " OK\n";
             } else if (command == "STRING") {
-                // Delete Old Object
+                // Clear Old BST
+                if (myStringBST != NULL) {
+                    myStringBST->clearTree();
+                }
 
                 // Instantiate new BST
                 myStringBST = new BST <string>;
@@ -51,40 +61,45 @@ int main(int argc, char* argv[]) {
                 // Set treeType
                 activeTreeType = "STRING";
 
+                out << " OK\n";
             } else if (command == "add") {
                 iss >> token;
+                out << " " << token;
 
                 // Perform operations on the correct tree type
                 if (activeTreeType == "INT") {
+
                     // Output OK if command is successful else output error
                     if (myIntBST->addNode(stoi(token))) {
-                        out << "OK" << endl;
+                        out << " OK" << endl;
                     } else {
                         throw token;
                     }
+
                 } else if (activeTreeType == "STRING") {
                     // Output OK if command is successful else output error
                     if (myStringBST->addNode(token)) {
-                        out << "OK" << endl;
+                        out << " OK" << endl;
                     } else {
                         throw token;
                     }
                 }
             } else if (command == "remove") {
                 iss >> token;
+                out << " " << token;
 
                 // Perform operations on the correct tree type
                 if (activeTreeType == "INT") {
                     // Output OK if command is successful else output error
                     if (myIntBST->removeNode(stoi(token))) {
-                        out << "OK" << endl;
+                        out << " OK" << endl;
                     } else {
                         throw token;
                     }
                 } else { 
                     // Output OK if command is successful else output error
                     if (myStringBST->removeNode(token)) {
-                        out << "OK" << endl;
+                        out << " OK" << endl;
                     } else {
                         throw token;
                     }
@@ -93,25 +108,26 @@ int main(int argc, char* argv[]) {
             } else if (command == "clear") {
                 // Perform operations on the correct tree type
                 if (activeTreeType == "INT") {
-                    myIntBST->clear();
-                    out << "OK" << endl;
+                    myIntBST->clearTree();
+                    out << " OK" << endl;
                 } else if (activeTreeType == "STRING") { 
-                    myStringBST->clear();
-                    out << "OK" << endl;
+                    myStringBST->clearTree();
+                    out << " OK" << endl;
                 }
             } else if (command == "size") {
                 // Perform operations on the correct tree type
                 if (activeTreeType == "INT") {
-                    out << myIntBST->size() << endl;
+                    out << " " << myIntBST->size() << endl;
                 } else if (activeTreeType == "STRING") { 
-                    out << myStringBST->size() << endl;
+                    out << " " << myStringBST->size() << endl;
                 }
             } else if (command == "print") {
                 // Perform operations on the correct tree type
                 if (activeTreeType == "INT") {
-                    out << myIntBST << endl;
+                    out << *myIntBST << endl;
+
                 } else if (activeTreeType == "STRING") { 
-                    out << myStringBST << endl;
+                    out << *myStringBST << endl;
                 }
             } else if (command == "find") {
                 iss >> token;
@@ -134,20 +150,20 @@ int main(int argc, char* argv[]) {
                 }
             } else if (command == "copy") {
                 // Perform operations on the correct tree type
-                if (activeTreeType == "INT") {
-                    myIntBST = myIntBSTCopy;
-                } else if (activeTreeType == "STRING") { 
-                    myStringBST = myStringBSTCopy;
-                }
+                // if (activeTreeType == "INT") {
+                //     myIntBST = myIntBSTCopy;
+                // } else if (activeTreeType == "STRING") { 
+                //     myStringBST = myStringBSTCopy;
+                // }
 
                 out << " OK" << endl;
             } else if (command == "printcopy") {
                 // Perform operations on the correct tree type
-                if (activeTreeType == "INT") {
-                    out << myIntBSTCopy << endl;
-                } else if (activeTreeType == "STRING") { 
-                    out << myStringBSTCopy << endl;
-                }
+                // if (activeTreeType == "INT") {
+                //     out << myIntBSTCopy << endl;
+                // } else if (activeTreeType == "STRING") { 
+                //     out << myStringBSTCopy << endl;
+                // }
             } else if (command == "tree") {
                 // Process
                 // Extra Credit
@@ -156,7 +172,7 @@ int main(int argc, char* argv[]) {
             }
  
         } catch (string e) {
-            out << "Error" << endl;
+            out << " Error" << endl;
         }
     }
 
