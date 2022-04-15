@@ -31,11 +31,13 @@ add not OK
 add with OK
 add dreams. OK
 add Die OK
-size 4
 print
   1: not
   2: dreams. with
   3: Die _
-clear OK
-size 0
-print empty
+size 4
+remove Die OK
+print
+  1: not
+  2: dreams. with
+size 3

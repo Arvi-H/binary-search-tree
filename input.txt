@@ -20,8 +20,8 @@ add not
 add with
 add dreams.
 add Die
-size
 print
-clear
 size
+remove Die
 print
+size

@@ -16,7 +16,7 @@ private:
         Node(T d) : data(d), left(NULL), right(NULL) {}
     };  
 
-    // Root node of our tree. Pointera are initialized to NULL
+    // Root node of our tree. Pointers are initialized to NULL
     Node *root;
     bool duplicate = false;
     size_t treeSize = 0;
@@ -44,6 +44,62 @@ private:
         return curr;
     }
 
+    bool removeNode2(Node *&curr, const T& value) {
+        // If current node is NULL
+        if (curr == NULL) {
+            return false;
+        }
+
+        // If value is greater than the current node
+        if (value > curr->data) {
+            return removeNode2(curr->right, value);
+        }
+        
+        // If value is less than the current node
+        if (value < curr->data) {
+            return removeNode2(curr->left, value);
+        }
+
+        // If node doesn't have any children
+        if (curr->left == NULL && curr->right == NULL) {
+            delete curr;
+            curr = NULL;
+
+        // If node doesn't have a right child  
+        } else if (curr->right == NULL) {
+            Node *temp = curr;
+            curr = curr->left;
+
+            delete temp;
+            temp = NULL;
+
+        // If node doesn't have a left child  
+        } else if (curr->left == NULL) {
+            Node *temp = curr;
+            curr = curr->right;
+
+            delete temp;
+            temp = NULL;
+
+        // If node has left and right children  
+        } else {
+            Node *temp = curr->left;
+
+            while (temp->right != NULL) {
+                temp = temp->right;
+            }    
+
+            curr->data = temp->data;
+            return removeNode2(curr->left, curr->data);
+        }
+
+        // Decrement size
+        treeSize--;
+
+        // If value is equal to the current node
+        return true;
+    }
+
     // Remove all nodes
     Node* clearAll(Node* curr) {
         if (curr == NULL) {
@@ -57,6 +113,7 @@ private:
         return NULL;
     } 
 
+    
 public:
     BST() {
         root = NULL;
@@ -77,7 +134,7 @@ public:
     
     // Return true when node is removed else return false
     bool removeNode(const T& value) {
-        // Decrement size
+       return removeNode2(root, value);
     }
     
     // Return true if tree is empty else return false
@@ -113,25 +170,6 @@ public:
         
         return left || right;
     }  
-
-    /* Print BST using inorder traversal
-    string printTree(Node* curr) const {
-
-        // TODO Print in req. format + return empty if tree has been cleared 
-        // currently getting seg faults trying to print empty tree
-        stringstream out;
-
-        if (curr == NULL) {
-            return " ";
-        } 
-        
-        out << curr->data << endl;
-        out << printTree(curr->left) << " ";
-        out << printTree(curr->right) << " ";
-
-        return out.str();
-    }
-    */
 
     // Return a level order traversal of a BST as a string
     string toString() const {
